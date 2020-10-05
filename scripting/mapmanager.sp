@@ -215,6 +215,7 @@ public Action Command_rmMap(int iClient, int args)
 	}
 
 	ReplyToCommand(iClient, "[SM] Deleted map: %s", sMap);
+	LogMessage("[SM] Deleted map: %s", sMap);
 	return Plugin_Handled;
 }
 
