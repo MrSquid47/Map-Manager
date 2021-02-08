@@ -4,7 +4,7 @@
 #define DEBUG
 
 #define PLUGIN_AUTHOR "MrSquid"
-#define PLUGIN_VERSION "1.0.0"
+#define PLUGIN_VERSION "1.0.1"
 
 #define MAX_MAP_DOWNLOAD 64
 
@@ -27,7 +27,8 @@ public Plugin myinfo =
 	url = ""
 };
 
-ConVar cvar_FastDL;
+ConVar cvar_FastDL,
+cvar_MapList;
 
 int g_iMapDownloadIndex = 1;
 
@@ -49,7 +50,8 @@ public void OnPluginStart()
 	LoadTranslations("common.phrases");
 	
 	CreateConVar("mapmanager_version", PLUGIN_VERSION, "version", FCVAR_SPONLY | FCVAR_UNLOGGED | FCVAR_DONTRECORD | FCVAR_REPLICATED | FCVAR_NOTIFY);
-	cvar_FastDL = CreateConVar("sm_mapmanager_fastdl", "http://cdn.jumpacademy.tf/?map=", "FastDL server to download from", FCVAR_NONE);
+	cvar_FastDL = CreateConVar("sm_mapmanager_fastdl", "http://cdn.jumpacademy.tf/fastdl/maps/", "FastDL server to download from", FCVAR_NONE);
+	cvar_MapList = CreateConVar("sm_mapmanager_maplist", "http://cdn.jumpacademy.tf/?map=list", "Map list download", FCVAR_NONE);
 	
 	RegAdminCmd("sm_dlmap", Command_dlMap, ADMFLAG_RCON, "download map");
 	RegAdminCmd("sm_refreshmaps", Command_refreshMaps, ADMFLAG_RCON, "refresh map list");
@@ -462,9 +464,8 @@ public Action Timer_updateMapList(Handle timer, int data)
 
 void GetMapList()
 {
-	char sURL[64], sFastDL[128];
-	GetConVarString(cvar_FastDL, sFastDL, sizeof(sFastDL));
-	Format(sURL, sizeof(sURL), "%slist", sFastDL);
+	char sURL[64];
+	GetConVarString(cvar_MapList, sURL, sizeof(sURL));
 	
 	Handle HTTPRequest = SteamWorks_CreateHTTPRequest(k_EHTTPMethodGET, sURL);
 	
