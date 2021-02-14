@@ -365,7 +365,7 @@ void DownloadMap(char[] sMapName)
 {
 	char sURL[128], sFastDL[128];
 	GetConVarString(cvar_FastDL, sFastDL, sizeof(sFastDL));
-	Format(sURL, sizeof(sURL), "%s%s", sFastDL, sMapName);
+	Format(sURL, sizeof(sURL), "%s%s.bsp", sFastDL, sMapName);
 	
 	Handle HTTPRequest = SteamWorks_CreateHTTPRequest(k_EHTTPMethodGET, sURL);
 	
